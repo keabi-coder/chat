@@ -136,6 +136,13 @@
         .bubble-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; }
         .color-1 { color: #e53935; } .color-2 { color: #00897b; } .color-3 { color: #8e24aa; } .color-4 { color: #3949ab; } .color-5 { color: #d81b60; }
 
+        .bubble-content { 
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: inherit;
+        }
+
         .bubble-meta { display: inline-flex; align-items: center; float: right; margin-left: 16px; margin-top: 6px; margin-bottom: -4px; margin-right: -4px; }
         .bubble-time { font-size: 11px; color: #a3a7aa; font-weight: 500; }
         .sent .bubble-time { color: #5da05b; }
@@ -145,15 +152,19 @@
         .input-bar { padding: 16px 24px; background: transparent; display: flex; justify-content: center; }
         .input-container {
             width: 100%; max-width: 760px; background: #ffffff; border-radius: 20px; padding: 6px 10px 6px 20px;
-            display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); gap: 12px;
+            display: flex; align-items: flex-end; box-shadow: 0 4px 12px rgba(0,0,0,0.05); gap: 12px;
         }
-        #user-input { flex: 1; border: none; outline: none; font-size: 16px; padding: 8px 0; background: transparent; }
+        #user-input { 
+            flex: 1; border: none; outline: none; font-size: 16px; padding: 8px 0; 
+            background: transparent; resize: none; max-height: 100px; font-family: inherit;
+        }
         .action-icon-btn { background: none; border: none; font-size: 20px; color: var(--tg-text-muted); cursor: pointer; transition: color 0.2s; }
         .action-icon-btn:hover { color: var(--tg-primary); }
         
         #send-btn {
             background-color: var(--tg-primary); color: white; border: none; width: 40px; height: 40px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.1s;
+            flex-shrink: 0;
         }
         #send-btn:hover { background-color: var(--tg-primary-hover); transform: scale(1.05); }
         #send-btn i { font-size: 16px; margin-left: 2px; }
@@ -216,7 +227,7 @@
             <div class="input-bar">
                 <div class="input-container">
                     <button class="action-icon-btn"><i class="fa-regular fa-face-smile"></i></button>
-                    <input type="text" id="user-input" placeholder="Message" autocomplete="off">
+                    <textarea id="user-input" placeholder="Message" autocomplete="off"></textarea>
                     <button class="action-icon-btn"><i class="fa-solid fa-paperclip"></i></button>
                     <button id="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
@@ -300,25 +311,42 @@
 
             const timeString = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
+            const bubble = document.createElement('div');
+            bubble.classList.add('tg-bubble');
+
             if (isMe) {
-                container.innerHTML = `
-                    <div class="tg-bubble">
-                        <span>${escapeHTML(data.text)}</span>
-                        <div class="bubble-meta">
-                            <span class="bubble-time">${timeString}</span>
-                            <span class="tg-ticks"><i class="fa-solid fa-check-double"></i></span>
-                        </div>
-                    </div>`;
+                const content = document.createElement('span');
+                content.classList.add('bubble-content');
+                content.textContent = data.text;
+
+                const meta = document.createElement('div');
+                meta.classList.add('bubble-meta');
+                meta.innerHTML = `
+                    <span class="bubble-time">${timeString}</span>
+                    <span class="tg-ticks"><i class="fa-solid fa-check-double"></i></span>
+                `;
+
+                bubble.appendChild(content);
+                bubble.appendChild(meta);
             } else {
-                container.innerHTML = `
-                    <div class="tg-bubble">
-                        <span class="bubble-name ${getUserColorClass(data.username)}">${escapeHTML(data.username)}</span>
-                        <span>${escapeHTML(data.text)}</span>
-                        <div class="bubble-meta">
-                            <span class="bubble-time">${timeString}</span>
-                        </div>
-                    </div>`;
+                const name = document.createElement('span');
+                name.classList.add('bubble-name', getUserColorClass(data.username));
+                name.textContent = escapeHTML(data.username);
+
+                const content = document.createElement('span');
+                content.classList.add('bubble-content');
+                content.textContent = data.text;
+
+                const meta = document.createElement('div');
+                meta.classList.add('bubble-meta');
+                meta.innerHTML = `<span class="bubble-time">${timeString}</span>`;
+
+                bubble.appendChild(name);
+                bubble.appendChild(content);
+                bubble.appendChild(meta);
             }
+
+            container.appendChild(bubble);
             return container;
         }
 
@@ -390,11 +418,23 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
             userInput.value = '';
+            userInput.style.height = 'auto';
         }
 
         sendBtn.addEventListener('click', transmitMessage);
-        userInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') transmitMessage(); });
+        userInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                transmitMessage();
+            }
+        });
         searchUsers.addEventListener('input', (e) => renderUserList(e.target.value));
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', () => {
+            userInput.style.height = 'auto';
+            userInput.style.height = Math.min(userInput.scrollHeight, 100) + 'px';
+        });
 
         messagesRef.limitToLast(150).on('child_added', (snapshot) => {
             const data = snapshot.val();
