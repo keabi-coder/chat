@@ -22,12 +22,12 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
+        html, body { height: 100%; width: 100%; }
+
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--tg-bg);
             color: var(--tg-text);
-            height: 100vh;
-            width: 100vw;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -42,39 +42,39 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 9999; opacity: 1; visibility: visible;
             transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
+            padding: 20px;
         }
         .login-card {
             width: 100%; max-width: 400px; padding: 40px 30px;
             background: #ffffff; border-radius: 24px; text-align: center;
         }
         .login-logo {
-            width: 120px; height: 120px; background: linear-gradient(135deg, #51a5ec, #2879c7);
-            border-radius: 36% 64% 64% 36% / 30% 30% 70% 70%;
+            width: 100px; height: 100px; background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border-radius: 50%;
             margin: 0 auto 30px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px rgba(51, 144, 236, 0.3);
-            animation: morph 6s ease-in-out infinite alternate;
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+            animation: float 3s ease-in-out infinite;
         }
-        @keyframes morph {
-            0% { border-radius: 36% 64% 64% 36% / 30% 30% 70% 70%; }
-            50% { border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%; }
-            100% { border-radius: 36% 64% 64% 36% / 30% 30% 70% 70%; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-        .login-logo i { font-size: 55px; color: white; margin-left: -5px; }
+        .login-logo i { font-size: 50px; color: white; }
         
         /* ----- APPLICATION SYSTEM BODY ----- */
         #tg-wrapper {
-            width: 100vw; height: 100vh; display: flex; background: #ffffff; overflow: hidden;
+            width: 100%; height: 100%; display: flex; background: #ffffff; overflow: hidden;
         }
-        @media (min-width: 992px) {
+        @media (min-width: 768px) {
             #tg-wrapper {
-                height: 94vh; max-height: 900px; width: 85vw; max-width: 1400px;
+                height: 95vh; max-height: 900px; width: 95vw; max-width: 1400px;
                 border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.1);
             }
         }
 
         /* Left Side Contact List panel */
         .sidebar {
-            width: 360px; min-width: 360px; background: var(--tg-sidebar-bg);
+            width: 100%; max-width: 360px; min-width: auto; background: var(--tg-sidebar-bg);
             border-right: 1px solid var(--tg-border); display: flex; flex-direction: column;
             z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
@@ -100,7 +100,7 @@
             width: 52px; height: 52px; border-radius: 50%; background: #55aaff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; color: white; margin-right: 14px; font-size: 18px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04); flex-shrink: 0;
         }
         .user-meta { flex: 1; min-width: 0; }
         .user-meta .name { font-size: 15px; font-weight: 600; color: #1c2024; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -110,30 +110,33 @@
         .chat-view { 
             flex: 1; display: flex; flex-direction: column; 
             background: #f4f4f5 url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png') repeat;
+            min-width: 0;
         }
         .chat-header {
-            padding: 12px 24px; background: #ffffff; border-bottom: 1px solid var(--tg-border);
-            display: flex; align-items: center; justify-content: space-between; height: 64px; z-index: 5;
+            padding: 12px 16px; background: #ffffff; border-bottom: 1px solid var(--tg-border);
+            display: flex; align-items: center; justify-content: space-between; min-height: 60px; z-index: 5;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .chat-header h3 { font-size: 16px; font-weight: 600; margin: 0; }
         .chat-header p { font-size: 13px; color: var(--tg-text-muted); margin: 0; }
         
         /* Main Feed Logs Window Scroller */
-        #chat-window { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        #chat-window { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 
         .msg-container { display: flex; width: 100%; margin-bottom: 2px; }
         .msg-container.sent { justify-content: flex-end; }
         .msg-container.received { justify-content: flex-start; }
 
         .tg-bubble {
-            padding: 8px 14px; border-radius: 16px; max-width: 65%; font-size: 15px; 
+            padding: 8px 12px; border-radius: 16px; max-width: 85%; font-size: 14px; 
             line-height: 1.45; word-wrap: break-word; position: relative;
             box-shadow: 0 2px 4px rgba(15,34,58,0.04); display: inline-block;
         }
         .sent .tg-bubble { background-color: var(--tg-my-bubble); border-bottom-right-radius: 4px; }
         .received .tg-bubble { background-color: var(--tg-other-bubble); border-bottom-left-radius: 4px; }
 
-        .bubble-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; }
+        .bubble-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; display: block; }
         .color-1 { color: #e53935; } .color-2 { color: #00897b; } .color-3 { color: #8e24aa; } .color-4 { color: #3949ab; } .color-5 { color: #d81b60; }
 
         .bubble-content { 
@@ -143,41 +146,116 @@
             font-family: inherit;
         }
 
-        .bubble-meta { display: inline-flex; align-items: center; float: right; margin-left: 16px; margin-top: 6px; margin-bottom: -4px; margin-right: -4px; }
+        .bubble-meta { display: inline-flex; align-items: center; float: right; margin-left: 12px; margin-top: 4px; margin-bottom: -2px; margin-right: -2px; }
         .bubble-time { font-size: 11px; color: #a3a7aa; font-weight: 500; }
         .sent .bubble-time { color: #5da05b; }
-        .tg-ticks { font-size: 11px; color: #40a7e3; margin-left: 4px; font-weight: bold; }
+        .tg-ticks { font-size: 10px; color: #40a7e3; margin-left: 4px; font-weight: bold; }
 
         /* Telegram Modular Message Action Bar Strip */
-        .input-bar { padding: 16px 24px; background: transparent; display: flex; justify-content: center; }
+        .input-bar { padding: 12px 16px; background: transparent; display: flex; justify-content: center; }
         .input-container {
-            width: 100%; max-width: 760px; background: #ffffff; border-radius: 20px; padding: 6px 10px 6px 20px;
-            display: flex; align-items: flex-end; box-shadow: 0 4px 12px rgba(0,0,0,0.05); gap: 12px;
+            width: 100%; background: #ffffff; border-radius: 20px; padding: 6px 10px 6px 16px;
+            display: flex; align-items: flex-end; box-shadow: 0 4px 12px rgba(0,0,0,0.05); gap: 8px;
         }
         #user-input { 
             flex: 1; border: none; outline: none; font-size: 16px; padding: 8px 0; 
             background: transparent; resize: none; max-height: 100px; font-family: inherit;
+            min-height: 24px;
         }
-        .action-icon-btn { background: none; border: none; font-size: 20px; color: var(--tg-text-muted); cursor: pointer; transition: color 0.2s; }
+        .action-icon-btn { background: none; border: none; font-size: 18px; color: var(--tg-text-muted); cursor: pointer; transition: color 0.2s; flex-shrink: 0; }
         .action-icon-btn:hover { color: var(--tg-primary); }
         
         #send-btn {
-            background-color: var(--tg-primary); color: white; border: none; width: 40px; height: 40px;
+            background-color: var(--tg-primary); color: white; border: none; width: 36px; height: 36px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.1s;
             flex-shrink: 0;
         }
         #send-btn:hover { background-color: var(--tg-primary-hover); transform: scale(1.05); }
-        #send-btn i { font-size: 16px; margin-left: 2px; }
+        #send-btn i { font-size: 14px; margin-left: 2px; }
 
-        /* Mobile Layout Configuration Override mappings */
-        @media (max-width: 768px) {
+        /* Tablet Layout Configuration */
+        @media (max-width: 991px) {
             .sidebar {
-                position: fixed; left: 0; top: 0; bottom: 0; width: 290px; min-width: 290px;
+                position: fixed; left: 0; top: 0; bottom: 0; width: 280px; min-width: 280px;
                 transform: translateX(-100%); box-shadow: 8px 0 25px rgba(0,0,0,0.08);
             }
             .sidebar.open { transform: translateX(0); }
-            .tg-bubble { max-width: 85%; }
-            .input-bar { padding: 10px; }
+            .tg-bubble { max-width: 80%; }
+            .chat-header { padding: 12px 12px; }
+            #chat-window { padding: 12px; }
+            .input-bar { padding: 10px 12px; }
+        }
+
+        /* Mobile Layout Configuration */
+        @media (max-width: 576px) {
+            body { padding: 0; margin: 0; }
+            #login-overlay { padding: 16px; }
+            .login-card { padding: 30px 20px; border-radius: 16px; }
+            .login-logo { width: 80px; height: 80px; }
+            .login-logo i { font-size: 40px; }
+            .login-card h2 { font-size: 20px; }
+            .login-card p { font-size: 13px; }
+
+            #tg-wrapper { border-radius: 0; width: 100vw; height: 100vh; }
+
+            .sidebar {
+                width: 100%;
+                position: fixed; left: 0; top: 0; bottom: 0; width: 75vw; min-width: auto;
+                transform: translateX(-100%); box-shadow: 8px 0 25px rgba(0,0,0,0.08);
+            }
+            .sidebar.open { transform: translateX(0); }
+
+            .chat-view { position: relative; }
+
+            .chat-header { 
+                padding: 10px 12px; 
+                min-height: 56px;
+            }
+            .chat-header h3 { font-size: 15px; }
+            .chat-header p { font-size: 12px; }
+
+            #chat-window { padding: 10px; gap: 8px; }
+            .tg-bubble { max-width: 85%; font-size: 13px; padding: 6px 10px; }
+            .bubble-name { font-size: 11px; }
+            .bubble-meta { margin-left: 8px; margin-top: 2px; }
+            .bubble-time { font-size: 10px; }
+
+            .input-bar { padding: 8px 12px; }
+            .input-container { padding: 4px 8px 4px 12px; gap: 6px; border-radius: 18px; }
+            #user-input { font-size: 14px; padding: 6px 0; }
+            .action-icon-btn { font-size: 16px; }
+            #send-btn { width: 32px; height: 32px; }
+            #send-btn i { font-size: 12px; }
+
+            .user-item { padding: 10px 12px; margin-bottom: 2px; }
+            .user-avatar { width: 44px; height: 44px; font-size: 16px; margin-right: 10px; }
+            .user-meta .name { font-size: 14px; }
+            .user-meta .subtext { font-size: 12px; }
+            .search-input { font-size: 14px; padding: 10px 14px 10px 36px; }
+
+            #clear-filter-btn { font-size: 12px; padding: 4px 12px !important; }
+            #clear-filter-btn i { font-size: 12px; }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+            .login-card { padding: 24px 16px; }
+            .login-logo { width: 70px; height: 70px; }
+            .login-logo i { font-size: 35px; }
+            .login-card h2 { font-size: 18px; }
+
+            .chat-header { padding: 8px 10px; }
+            .chat-header h3 { font-size: 14px; }
+            #chat-window { padding: 8px; }
+            .tg-bubble { max-width: 90%; font-size: 12px; }
+
+            .input-bar { padding: 6px 10px; }
+            .input-container { padding: 2px 6px 2px 10px; gap: 4px; }
+            .action-icon-btn { font-size: 14px; }
+            #send-btn { width: 30px; height: 30px; }
+
+            .user-avatar { width: 40px; height: 40px; font-size: 14px; margin-right: 8px; }
+            .user-item { padding: 8px 10px; }
         }
     </style>
 </head>
@@ -186,12 +264,12 @@
     <div id="login-overlay">
         <div class="login-card animated fadeIn">
             <div class="login-logo">
-                <i class="fa-solid fa-paper-plane"></i>
+                <i class="fa-solid fa-comments"></i>
             </div>
-            <h2 class="fw-bold text-dark">Sign in to Telegram</h2>
-            <p class="text-secondary">Please enter your name to authenticate and join the open channel matrix workspace.</p>
+            <h2 class="fw-bold text-dark">Join G-Chat</h2>
+            <p class="text-secondary">Enter your name to join our community chat and start conversations.</p>
             <input type="text" id="username-input" class="login-input form-control shadow-none" placeholder="Your Name" autocomplete="off" maxlength="18">
-            <button id="join-btn" class="login-btn btn w-100 shadow-none">Next</button>
+            <button id="join-btn" class="login-btn btn w-100 shadow-none">Join Now</button>
         </div>
     </div>
 
@@ -200,7 +278,7 @@
             <div class="sidebar-header">
                 <div class="search-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="search-users" class="search-input" placeholder="Search">
+                    <input type="text" id="search-users" class="search-input" placeholder="Search users">
                 </div>
             </div>
             <div class="user-list" id="user-list"></div>
@@ -208,17 +286,17 @@
 
         <div class="chat-view">
             <div class="chat-header">
-                <div class="d-flex align-items-center gap-3">
-                    <button class="menu-toggle btn p-0 shadow-none border-0 d-md-none" id="menu-btn">
-                        <i class="fa-solid fa-bars fs-4"></i>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="menu-toggle btn p-0 shadow-none border-0 d-lg-none" id="menu-btn" style="font-size: 20px;">
+                        <i class="fa-solid fa-bars"></i>
                     </button>
                     <div>
                         <h3 id="room-title">G-Chat</h3>
                         <p id="room-subtitle">syncing network nodes...</p>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-light rounded-pill border px-3" id="clear-filter-btn" style="display: none;">
-                    <i class="fa-solid fa-arrow-left me-1"></i> Back to Global
+                <button class="btn btn-sm btn-light rounded-pill border px-2 px-md-3" id="clear-filter-btn" style="display: none; white-space: nowrap;">
+                    <i class="fa-solid fa-arrow-left me-1"></i> <span class="d-none d-sm-inline">Back</span>
                 </button>
             </div>
 
